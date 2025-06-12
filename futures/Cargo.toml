@@ -35,7 +35,7 @@ smol.optional = true
 
 tokio.workspace = true
 tokio.optional = true
-tokio.features = ["rt", "rt-multi-thread", "time"]
+tokio.features = ["rt", "time"]
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen-futures.workspace = true
