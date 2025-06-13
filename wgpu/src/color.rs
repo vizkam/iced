@@ -106,14 +106,17 @@ pub fn convert(
         device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
             label: Some("iced_wgpu.offscreen.blit.pipeline"),
             layout: Some(&pipeline_layout),
+            cache: None,
             vertex: wgpu::VertexState {
                 module: &shader,
-                entry_point: "vs_main",
+                entry_point: Some("vs_main"),
+                compilation_options: wgpu::PipelineCompilationOptions::default(),
                 buffers: &[],
             },
             fragment: Some(wgpu::FragmentState {
                 module: &shader,
-                entry_point: "fs_main",
+                entry_point: Some("fs_main"),
+                compilation_options: wgpu::PipelineCompilationOptions::default(),
                 targets: &[Some(wgpu::ColorTargetState {
                     format,
                     blend: Some(wgpu::BlendState {

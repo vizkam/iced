@@ -136,6 +136,9 @@ pub enum SurfaceError {
     /// There is no more memory left to allocate a new frame.
     #[error("There is no more memory left to allocate a new frame")]
     OutOfMemory,
+    /// Acquiring a texture failed with a generic error. Check error callbacks for more information.
+    #[error("Acquiring a texture failed with a generic error. Check error callbacks for more information")]
+    Other
 }
 
 /// Contains information about the graphics (e.g. graphics adapter, graphics backend).
