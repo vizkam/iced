@@ -54,7 +54,7 @@ impl Compositor {
         settings: Settings,
         compatible_window: Option<W>,
     ) -> Result<Self, Error> {
-        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+        let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
             backends: settings.backends,
             ..Default::default()
         });
@@ -76,12 +76,13 @@ impl Compositor {
             .and_then(|window| instance.create_surface(window).ok());
 
         let adapter_options = wgpu::RequestAdapterOptions {
-            power_preference: wgpu::util::power_preference_from_env()
-                .unwrap_or(if settings.antialiasing.is_none() {
+            power_preference: wgpu::PowerPreference::from_env().unwrap_or(
+                if settings.antialiasing.is_none() {
                     wgpu::PowerPreference::LowPower
                 } else {
                     wgpu::PowerPreference::HighPerformance
-                }),
+                },
+            ),
             compatible_surface: compatible_surface.as_ref(),
             force_fallback_adapter: false,
         };
@@ -162,6 +163,7 @@ impl Compositor {
                         ),
                         required_features: wgpu::Features::empty(),
                         required_limits: required_limits.clone(),
+                        memory_hints: wgpu::MemoryHints::Performance,
                     },
                     None,
                 )
@@ -257,6 +259,7 @@ pub fn present<T: AsRef<str>>(
             wgpu::SurfaceError::OutOfMemory => {
                 Err(compositor::SurfaceError::OutOfMemory)
             }
+            wgpu::SurfaceError::Other => Err(compositor::SurfaceError::Other),
         },
     }
 }
@@ -274,7 +277,7 @@ impl graphics::Compositor for Compositor {
             None | Some("wgpu") => {
                 let mut settings = Settings::from(settings);
 
-                if let Some(backends) = wgpu::util::backend_bits_from_env() {
+                if let Some(backends) = wgpu::Backends::from_env() {
                     settings.backends = backends;
                 }
 
@@ -446,9 +449,9 @@ pub fn screenshot<T: AsRef<str>>(
 
     encoder.copy_texture_to_buffer(
         texture.as_image_copy(),
-        wgpu::ImageCopyBuffer {
+        wgpu::TexelCopyBufferInfo {
             buffer: &output_buffer,
-            layout: wgpu::ImageDataLayout {
+            layout: wgpu::TexelCopyBufferLayout {
                 offset: 0,
                 bytes_per_row: Some(dimensions.padded_bytes_per_row as u32),
                 rows_per_image: None,

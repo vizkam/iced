@@ -86,10 +86,12 @@ impl Pipeline {
         let pipeline =
             device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
                 label: Some("iced_wgpu.quad.solid.pipeline"),
+                cache: None,
                 layout: Some(&layout),
                 vertex: wgpu::VertexState {
                     module: &shader,
-                    entry_point: "solid_vs_main",
+                    entry_point: Some("solid_vs_main"),
+                    compilation_options: wgpu::PipelineCompilationOptions::default(),
                     buffers: &[wgpu::VertexBufferLayout {
                         array_stride: std::mem::size_of::<Solid>() as u64,
                         step_mode: wgpu::VertexStepMode::Instance,
@@ -117,7 +119,8 @@ impl Pipeline {
                 },
                 fragment: Some(wgpu::FragmentState {
                     module: &shader,
-                    entry_point: "solid_fs_main",
+                    entry_point: Some("solid_fs_main"),
+                    compilation_options: wgpu::PipelineCompilationOptions::default(),
                     targets: &quad::color_target_state(format),
                 }),
                 primitive: wgpu::PrimitiveState {
