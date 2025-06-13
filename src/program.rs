@@ -16,9 +16,9 @@ pub trait Program: Sized {
     type State;
 
     /// The message of the program.
-    #[cfg(not(target_family = "wasm32"))]
+    #[cfg(not(target_arch = "wasm32"))]
     type Message: Send + std::fmt::Debug + 'static;
-    #[cfg(target_family = "wasm32")]
+    #[cfg(target_arch = "wasm32")]
     type Message: std::fmt::Debug + 'static;
 
     /// The theme of the program.
