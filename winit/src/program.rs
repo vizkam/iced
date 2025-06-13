@@ -49,7 +49,10 @@ where
     Self::Theme: DefaultStyle,
 {
     /// The type of __messages__ your [`Program`] will produce.
+    #[cfg(target_arch = "wasm32")]
     type Message: std::fmt::Debug + Send;
+    #[cfg(not(target_arch = "wasm32"))]
+    type Message: std::fmt::Debug;
 
     /// The theme used to draw the [`Program`].
     type Theme;
