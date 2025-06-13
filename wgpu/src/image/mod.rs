@@ -126,9 +126,12 @@ impl Pipeline {
             device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
                 label: Some("iced_wgpu::image pipeline"),
                 layout: Some(&layout),
+                cache: None,
                 vertex: wgpu::VertexState {
                     module: &shader,
-                    entry_point: "vs_main",
+                    entry_point: Some("vs_main"),
+                    compilation_options:
+                        wgpu::PipelineCompilationOptions::default(),
                     buffers: &[wgpu::VertexBufferLayout {
                         array_stride: mem::size_of::<Instance>() as u64,
                         step_mode: wgpu::VertexStepMode::Instance,
@@ -156,7 +159,9 @@ impl Pipeline {
                 },
                 fragment: Some(wgpu::FragmentState {
                     module: &shader,
-                    entry_point: "fs_main",
+                    compilation_options:
+                        wgpu::PipelineCompilationOptions::default(),
+                    entry_point: Some("fs_main"),
                     targets: &[Some(wgpu::ColorTargetState {
                         format,
                         blend: Some(wgpu::BlendState {

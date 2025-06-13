@@ -138,7 +138,7 @@ pub enum SurfaceError {
     OutOfMemory,
     /// Acquiring a texture failed with a generic error. Check error callbacks for more information.
     #[error("Acquiring a texture failed with a generic error. Check error callbacks for more information")]
-    Other
+    Other,
 }
 
 /// Contains information about the graphics (e.g. graphics adapter, graphics backend).

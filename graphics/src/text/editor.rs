@@ -674,10 +674,7 @@ fn highlight_line(
     from: usize,
     to: usize,
 ) -> impl Iterator<Item = (f32, f32)> + '_ {
-    let layout = line
-        .layout_opt()
-        .map(Vec::as_slice)
-        .unwrap_or_default();
+    let layout = line.layout_opt().map(Vec::as_slice).unwrap_or_default();
 
     layout.iter().map(move |visual_line| {
         let start = visual_line
@@ -728,9 +725,7 @@ fn visual_lines_offset(line: usize, buffer: &cosmic_text::Buffer) -> i32 {
     let visual_lines_offset: usize = buffer.lines[start..]
         .iter()
         .take(end - start)
-        .map(|line| {
-            line.layout_opt().map(Vec::len).unwrap_or_default()
-        })
+        .map(|line| line.layout_opt().map(Vec::len).unwrap_or_default())
         .sum();
 
     visual_lines_offset as i32 * if scroll.line < line { 1 } else { -1 }
